@@ -50,4 +50,48 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 npm run backend
 ```
+# 📖 Documentación de los Endpoints
 
+La API se divide en dos secciones principales: Autenticación y Tareas.
+
+Nota Importante: Todos los endpoints de /tasks están protegidos. Debes incluir el token JWT obtenido en el login dentro del Header de la petición: Authorization: Bearer <tu_token_aqui>
+
+### 🔐 Autenticación (`/auth`)
+
+Estas rutas son públicas y permiten la gestión de la identidad del usuario.
+
+#### **POST** `/auth/register`
+**Registrar nuevo usuario** Permite dar de alta a un usuario nuevo en la base de datos. Se debe enviar un objeto JSON con el `email` y el `password` deseados. La contraseña será encriptada antes de guardarse.
+
+![alt text](image.png)
+
+#### **POST** `/auth/login`
+**Iniciar sesión** Verifica las credenciales del usuario. Si son correctas, el servidor responderá con un **Token JWT** (que debe guardarse en el cliente para futuras peticiones) y los datos básicos del usuario.
+
+![alt text](image-1.png)
+
+### 📋 Gestión de Tareas (`/tasks`)
+
+Rutas protegidas para el manejo del tablero Kanban. El usuario solo puede acceder y modificar sus propias tareas.
+
+#### **GET** `/tasks`
+**Obtener todas las tareas** Recupera el listado completo de tareas creadas por el usuario autenticado.  
+- **Filtros:** Admite parámetros opcionales en la URL (Query Params) para filtrar los resultados, por ejemplo: `?status=PENDING` o `?priority=HIGH`.
+
+![alt text](image-2.png)
+
+#### **POST** `/tasks`
+**Crear una nueva tarea** Genera una nueva tarjeta en el tablero.  
+- **Cuerpo de la petición:** Se requiere enviar el `title` (título). Opcionalmente se pueden enviar `description` (descripción), `priority` (prioridad) y `status` (estado).
+
+![alt text](image-3.png)
+
+#### **PUT** `/tasks/:id`
+**Actualizar una tarea** Permite modificar cualquier campo de una tarea existente. Es utilizado tanto para editar el contenido (título/descripción) como para mover la tarea de columna (cambiar su `status`) y la columna (cambiar su `priority`).
+
+![alt text](image-4.png)
+
+#### **DELETE** `/tasks/:id`
+Eliminación lógica de una tarea. Realiza un "Soft Delete" sobre el recurso. El registro no se borra físicamente de la base de datos, sino que se actualiza su campo deletedAt, permitiendo su posible restauración en el futuro.
+
+![alt text](image-5.png)
