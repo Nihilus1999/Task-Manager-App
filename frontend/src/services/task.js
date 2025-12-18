@@ -49,7 +49,6 @@ const statusMessages = {
       default: "Ocurrió un error al actualizar la tarea.",
     },
   },
-
   deleteTask: {
     success: "Tarea eliminada correctamente",
     error: {

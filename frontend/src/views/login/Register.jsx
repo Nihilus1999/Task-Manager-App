@@ -25,7 +25,7 @@ export default function Register() {
   // Snackbar
   const [snackbar, setSnackbar] = useState({
     open: false,
-    severity: "success", // success | error
+    severity: "success",
     message: "",
   });
 

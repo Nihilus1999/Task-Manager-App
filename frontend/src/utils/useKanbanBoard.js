@@ -24,7 +24,6 @@ export const useKanbanBoard = () => {
     [TASK_STATUS.COMPLETED]: [],
   });
 
-  // Calculamos la vista filtrada sin tocar el estado original
   const filteredTasks = useMemo(() => {
     const currentTasks = { ...tasksByStatus };
     
@@ -43,6 +42,7 @@ export const useKanbanBoard = () => {
     return currentTasks;
   }, [tasksByStatus, filters]);
 
+  // --- HELPERS ---
   const normalizeStatus = (status) => {
     const s = String(status || "").toLowerCase();
     return Object.values(TASK_STATUS).includes(s) ? s : TASK_STATUS.PENDING;
@@ -61,11 +61,12 @@ export const useKanbanBoard = () => {
     );
   };
 
-  const fetchTasks = async () => {
-    setLoading(true);
+  const fetchTasks = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
+    
     try {
-      const { data } = await getTasks();
-      const list = Array.isArray(data) ? data : [];
+      const response = await getTasks();
+      const list = Array.isArray(response) ? response : (response?.data || []);
       
       const grouped = {
         [TASK_STATUS.PENDING]: [],
@@ -82,7 +83,7 @@ export const useKanbanBoard = () => {
       console.error(error);
       setNotification({ open: true, message: "Error al cargar tareas", severity: "error" });
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
@@ -106,7 +107,6 @@ export const useKanbanBoard = () => {
 
     if (!activeContainer || !overContainer) return;
 
-    // Movimiento dentro de la misma columna
     if (activeContainer === overContainer) {
       const activeIndex = tasksByStatus[activeContainer].findIndex((t) => String(t.id) === activeId);
       const overIndex = tasksByStatus[overContainer].findIndex((t) => String(t.id) === overId);
@@ -120,7 +120,6 @@ export const useKanbanBoard = () => {
       return;
     }
 
-    // Movimiento entre columnas: UI Optimista
     const task = findTaskById(activeId);
     if (!task) return;
 
@@ -134,7 +133,7 @@ export const useKanbanBoard = () => {
       await updateTask(task.id, { status: overContainer });
       setNotification({ open: true, message: "Estado actualizado", severity: "success" });
     } catch (error) {
-      fetchTasks(); // Si falla el backend, resincronizamos todo
+      fetchTasks(); // Resincronizar si falla
       setNotification({ open: true, message: "Error al guardar cambios", severity: "error" });
     }
   };

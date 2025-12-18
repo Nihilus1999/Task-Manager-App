@@ -10,21 +10,4 @@ const index = axios.create({
   },
 });
 
-index.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    if (!config.params) {
-      config.params = {};
-    }
-    config.params.t = Date.now();
-
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
 export default index;

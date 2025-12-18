@@ -8,7 +8,7 @@ const AppRoutesBuilder = () => {
   const buildRoute = (route) => {
     const access = route.access || [];
 
-    // Rutas guest (login / register)
+    // Rutas publicas
     if (access.includes("guest") && token) {
       return <Navigate to="/kanban" replace />;
     }

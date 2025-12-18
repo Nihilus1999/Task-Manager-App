@@ -14,10 +14,7 @@ export default function TaskEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Obtenemos la tarea que viene desde el TaskCard
   const taskData = location.state?.task;
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [feedback, setFeedback] = useState({ open: false, type: "success", text: "" });
@@ -62,7 +59,7 @@ export default function TaskEdit() {
     }
   };
 
-  if (!taskData) return null; // Evita renderizado flash antes del redirect
+  if (!taskData) return null;
 
   return (
     <Box

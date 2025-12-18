@@ -3,7 +3,10 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Paper, Typography, Box, Chip, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import { PRIORITIES } from "../../utils/kanbanConstants";
+import { deleteTask } from "@/services/task";
 
 const getPriorityColor = (priority) => {
   switch (String(priority).toLowerCase()) {
@@ -14,7 +17,7 @@ const getPriorityColor = (priority) => {
   }
 };
 
-export const TaskCard = ({ task, isOverlay = false }) => {
+export const TaskCard = ({ task, isOverlay = false, onDeleteSuccess }) => {
   const navigate = useNavigate();
   const priorityColor = getPriorityColor(task.priority);
   const isPriorityDefault = priorityColor === "default";
@@ -22,8 +25,22 @@ export const TaskCard = ({ task, isOverlay = false }) => {
   const handleEditClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    // Pasamos la tarea via state para no tener que hacer un getById
     navigate(`/edit-task/${task.id}`, { state: { task } });
+  };
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    try {
+      await deleteTask(task.id);
+      if (onDeleteSuccess) {
+        onDeleteSuccess(); 
+      } else {
+        console.warn("No se pasó la función onDeleteSuccess");
+      }
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+    }
   };
 
   return (
@@ -40,7 +57,7 @@ export const TaskCard = ({ task, isOverlay = false }) => {
         "&:hover": {
           borderColor: "primary.main",
           boxShadow: 3,
-          "& .edit-btn": { opacity: 1 }
+          "& .action-btn": { opacity: 1 }
         }
       }}
     >
@@ -49,21 +66,39 @@ export const TaskCard = ({ task, isOverlay = false }) => {
           {task.title}
         </Typography>
         
-        <IconButton 
-          size="small" 
-          className="edit-btn"
-          onClick={handleEditClick}
-          onPointerDown={(e) => e.stopPropagation()}
-          sx={{ 
-            ml: 1, 
-            mt: -0.5, 
-            opacity: 0.6,
-            transition: "opacity 0.2s",
-            "&:hover": { color: "primary.main", opacity: 1 }
-          }}
-        >
-          <EditIcon fontSize="small" />
-        </IconButton>
+        <Box display="flex">
+            <IconButton 
+              size="small" 
+              className="action-btn"
+              onClick={handleEditClick}
+              onPointerDown={(e) => e.stopPropagation()}
+              sx={{ 
+                ml: 0.5, 
+                mt: -0.5, 
+                opacity: 0.6,
+                transition: "opacity 0.2s",
+                "&:hover": { color: "primary.main", opacity: 1 }
+              }}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+
+            <IconButton 
+              size="small" 
+              className="action-btn"
+              onClick={handleDelete}
+              onPointerDown={(e) => e.stopPropagation()}
+              sx={{ 
+                ml: 0.5, 
+                mt: -0.5, 
+                opacity: 0.6,
+                transition: "all 0.2s",
+                "&:hover": { color: "error.main", opacity: 1, bgcolor: 'error.lighter' }
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+        </Box>
       </Box>
       
       <Typography 
@@ -97,7 +132,7 @@ export const TaskCard = ({ task, isOverlay = false }) => {
   );
 };
 
-export const SortableTaskItem = ({ task }) => {
+export const SortableTaskItem = ({ task, onDeleteSuccess }) => {
   const {
     attributes,
     listeners,
@@ -115,7 +150,7 @@ export const SortableTaskItem = ({ task }) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <TaskCard task={task} />
+      <TaskCard task={task} onDeleteSuccess={onDeleteSuccess} />
     </div>
   );
-};
+}
