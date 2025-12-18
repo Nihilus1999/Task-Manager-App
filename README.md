@@ -1,4 +1,4 @@
-# ✅ Task Manager App
+# 📋 Task Manager App
 
 Aplicación web para la **gestión de tareas por usuario**, que permite **registrarse, iniciar sesión y administrar tareas** de forma organizada, incluyendo la creación, consulta, actualización y eliminación de tareas.
 
