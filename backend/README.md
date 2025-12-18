@@ -1,4 +1,4 @@
-# Task Manager APP — Backend API
+# Task Manager App — Backend API
 
 Backend REST API desarrollada con **Node.js**, **Express** y **Sequelize**, utilizando **PostgreSQL** como base de datos.  
 Este proyecto permite la **gestión de tareas por usuario**, incluyendo **registro y login**, autenticación con **JWT**, y operaciones CRUD protegidas por token.
