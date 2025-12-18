@@ -5,7 +5,7 @@ import { Paper, Typography, Box, Chip, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { PRIORITIES } from "../../utils/kanbanConstants";
+import { PRIORITIES } from "@/utils/kanbanConstants";
 import { deleteTask } from "@/services/task";
 
 const getPriorityColor = (priority) => {

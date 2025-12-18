@@ -16,7 +16,6 @@ import {
   Stack
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
 import { createTask } from "@/services/task";
 import { PRIORITIES, TASK_STATUS } from "@/utils/kanbanConstants";
 
@@ -99,7 +98,6 @@ export default function TaskCreate() {
         }}
       >
         <CardContent sx={{ p: 4 }}>
-          {/* Header */}
           <Stack direction="row" alignItems="center" mb={2} spacing={1}>
             <Link component={RouterLink} to="/kanban" color="text.secondary">
               <ArrowBackIcon />

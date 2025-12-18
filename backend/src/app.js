@@ -18,7 +18,6 @@ app.use(
 app.use(express.json());
 
 //ROUTES
-
 app.use("/auth", authRoutes);
 app.use("/tasks", taskRoutes);
 

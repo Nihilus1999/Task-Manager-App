@@ -21,8 +21,6 @@ export default function Register() {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  // Snackbar
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",

@@ -79,8 +79,7 @@ const resolveErrorMessage = (error, key) => {
 export const createTask = async (taskPayload) => {
   try {
     const response = await index.post("tasks", taskPayload);
-
-    // Soporta backends que devuelven { data } o la entidad directa
+    
     const data = response?.data?.data ?? response?.data;
 
     return {

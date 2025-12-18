@@ -21,14 +21,11 @@ import {
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddIcon from "@mui/icons-material/Add";
 import LogoutIcon from "@mui/icons-material/Logout";
-
-// Redux & Router
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "@/configs/redux/authSlice";
-
-import { useKanbanBoard } from "../../utils/useKanbanBoard";
-import { BOARD_COLUMNS, PRIORITIES } from "../../utils/kanbanConstants";
+import { useKanbanBoard } from "@/utils/useKanbanBoard";
+import { BOARD_COLUMNS, PRIORITIES } from "@/utils/kanbanConstants";
 import { KanbanColumn } from "./KanbanColumn";
 import { TaskCard } from "./TaskCard";
 
@@ -145,7 +142,7 @@ export default function KanbanBoard() {
                   color="error"
                   sx={{
                     border: "1px solid",
-                    borderColor: "error.light", // Borde sutil rojo
+                    borderColor: "error.light",
                     borderRadius: 2,
                     "&:hover": {
                       backgroundColor: "error.lighter",
