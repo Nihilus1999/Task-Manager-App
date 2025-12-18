@@ -9,8 +9,8 @@ const app = express();
 //CONFIG
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    origin: `http://localhost:${process.env.PORT_FRONTEND || 5173}`,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "Pragma"],
     credentials: true,
   })
