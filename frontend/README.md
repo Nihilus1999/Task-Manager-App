@@ -1,4 +1,4 @@
-# 📋 Kanban Task Manager — Frontend
+# Task Manager App — Frontend
 
 Frontend de la aplicación de **Gestión de Tareas Kanban**, desarrollada con **React** y **Redux Toolkit**, utilizando **Material UI (MUI)** para una interfaz moderna y responsiva.
 
