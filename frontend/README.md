@@ -26,10 +26,10 @@ Esta aplicación implementa un tablero interactivo con funcionalidad **Drag & Dr
 
 ### 2. Edición de Tareas Optimizada
 - **Navegación con Estado:** Solución implementada para editar tareas sin necesidad de un endpoint `getTaskById`.
-- La vista `TaskEdit` recibe los datos directamente desde la tarjeta (`TaskCard`) a través de `location.state` de React Router, reduciendo las llamadas al servidor.
+- La vista `TaskUpdate` recibe los datos directamente desde la tarjeta (`TaskCard`) a través de `location.state` de React Router, reduciendo las llamadas al servidor.
 
 ### 3. Autenticación y Seguridad
-- Gestión de sesión con **JWT** y almacenamiento en Redux.
+- Gestión de sesión con **JWT** y almacenamiento en Redux, el token es guardado en el localStorage para su uso.
 - **Logout Integrado:** Botón de cierre de sesión en el `KanbanHeader` que limpia el estado y redirige al login.
 - Protección contra expiración de token.
 
@@ -50,3 +50,24 @@ npm install
 ```
 npm run frontend
 ```
+## 🛠️ Vistas principales del frontend
+
+Login de Inicio
+
+![alt text](image.png)
+
+Registro de usuario
+
+![alt text](image-1.png)
+
+Kanban de tareas (vista principal)
+
+![alt text](image-2.png)
+
+Creacion de la tarea
+
+![alt text](image-3.png)
+
+Edicion de la tarea
+
+![alt text](image-4.png)
