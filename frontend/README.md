@@ -1,16 +1,52 @@
-# React + Vite
+# 📋 Kanban Task Manager — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend de la aplicación de **Gestión de Tareas Kanban**, desarrollada con **React** y **Redux Toolkit**, utilizando **Material UI (MUI)** para una interfaz moderna y responsiva.
 
-Currently, two official plugins are available:
+Esta aplicación implementa un tablero interactivo con funcionalidad **Drag & Drop** (arrastrar y soltar), gestión optimizada de estados, autenticación JWT y una arquitectura de servicios refactorizada para un manejo de errores limpio y escalable.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Tecnologías utilizadas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Core:** React, Vite
+- **Estado Global:** Redux Toolkit (Auth & UI State)
+- **UI Framework:** Material UI (MUI)
+- **Drag & Drop:** @dnd-kit/core, @dnd-kit/sortable
+- **Formularios:** React Hook Form
+- **Navegación:** React Router DOM
+- **Http Client:** Axios (con interceptores configurados)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Características Principales Implementadas
+
+### 1. Tablero Kanban Interactivo
+- Funcionalidad completa de **Drag & Drop** para mover tareas entre columnas (Pendiente, En Progreso, Completada).
+- Componentes visuales como `TaskCard` con indicadores de prioridad por colores (Chips).
+
+### 2. Edición de Tareas Optimizada
+- **Navegación con Estado:** Solución implementada para editar tareas sin necesidad de un endpoint `getTaskById`.
+- La vista `TaskEdit` recibe los datos directamente desde la tarjeta (`TaskCard`) a través de `location.state` de React Router, reduciendo las llamadas al servidor.
+
+### 3. Autenticación y Seguridad
+- Gestión de sesión con **JWT** y almacenamiento en Redux.
+- **Logout Integrado:** Botón de cierre de sesión en el `KanbanHeader` que limpia el estado y redirige al login.
+- Protección contra expiración de token.
+
+---
+
+## 🛠️ Instalación del frontend
+
+1. Instalar las dependencias necesarias:
+
+```
+npm install
+```
+
+2. Configurar las variables de entorno: Debe cambiar el nombre de .env.example por .env para configurar la URL base del backend.
+
+3. Ejecuta el siguiente scripts personalizado para correr el backend en desarrollo
+
+```
+npm run frontend
+```

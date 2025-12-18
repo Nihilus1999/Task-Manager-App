@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-
 import {
   Box,
   Card,
@@ -15,71 +14,57 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-
 import { setCredentials } from "@/configs/redux/authSlice";
 import { login } from "@/services/auth.js";
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [loading, setLoading] = useState(false);
-
-  // Snackbar
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success", // "success" | "error" | "info" | "warning"
-    message: "",
-  });
-
-  const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [feedback, setFeedback] = useState({ open: false, type: "success", text: "" });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: { email: "", password: "" },
-    mode: "onTouched",
-  });
+  } = useForm({ mode: "onTouched" });
 
-  const closeSnackbar = (_, reason) => {
+  const handleCloseFeedback = (_, reason) => {
     if (reason === "clickaway") return;
-    setSnackbar((prev) => ({ ...prev, open: false }));
+    setFeedback((prev) => ({ ...prev, open: false }));
   };
 
-  const onSubmit = async ({ email, password }) => {
-    setLoading(true);
-    setSuccess(false);
-    setSnackbar((prev) => ({ ...prev, open: false }));
+  const processLogin = async ({ email, password }) => {
+    setIsLoading(true);
+    setIsSuccess(false);
+    setFeedback((prev) => ({ ...prev, open: false }));
 
     try {
-      const result = await login(email, password);
+      const { token, user } = await login(email, password);
 
-      setSuccess(true);
-      setSnackbar({
+      setIsSuccess(true);
+      setFeedback({
         open: true,
-        severity: "success",
-        message: "Inicio de sesión exitoso. Redirigiendo...",
+        type: "success",
+        text: "Inicio de sesión exitoso. Redirigiendo...",
       });
 
       setTimeout(() => {
-        dispatch(
-          setCredentials({
-            token: result.token,
-            user: result.user,
-          })
-        );
+        dispatch(setCredentials({ token, user }));
         navigate("/kanban", { replace: true });
       }, 2000);
-    } catch (e) {
-      setSnackbar({
+
+    } catch (error) {
+      setFeedback({
         open: true,
-        severity: "error",
-        message: e.message || "Error al iniciar sesión",
+        type: "error",
+        text: error.message || "Error al iniciar sesión",
       });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -89,51 +74,29 @@ export default function Login() {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{
-        background: "linear-gradient(135deg, #f5f7fa, #e4ebf5)",
-      }}
     >
-      <Card
-        elevation={6}
-        sx={{
-          width: "100%",
-          maxWidth: 420,
-          borderRadius: 4,
-        }}
-      >
+      <Card elevation={6} sx={{ width: "100%", maxWidth: 420, borderRadius: 4 }}>
         <CardContent sx={{ p: 4 }}>
-          <Typography
-            variant="h5"
-            fontWeight={700}
-            textAlign="center"
-            gutterBottom
-          >
+          <Typography variant="h5" fontWeight={700} textAlign="center" gutterBottom>
             Bienvenido
           </Typography>
 
-          <Typography
-            variant="body2"
-            textAlign="center"
-            sx={{ color: "text.secondary", mb: 3 }}
-          >
+          <Typography variant="body2" textAlign="center" color="text.secondary" mb={3}>
             Inicia sesión para continuar
           </Typography>
 
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <Box component="form" onSubmit={handleSubmit(processLogin)} noValidate>
             <TextField
               label="Correo electrónico"
               fullWidth
               margin="normal"
               autoComplete="email"
-              disabled={loading || success}
-              error={Boolean(errors.email)}
+              disabled={isLoading || isSuccess}
+              error={!!errors.email}
               helperText={errors.email?.message}
               {...register("email", {
                 required: "El correo es obligatorio",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Correo inválido",
-                },
+                pattern: { value: EMAIL_PATTERN, message: "Correo inválido" },
               })}
             />
 
@@ -143,15 +106,12 @@ export default function Login() {
               fullWidth
               margin="normal"
               autoComplete="current-password"
-              disabled={loading || success}
-              error={Boolean(errors.password)}
+              disabled={isLoading || isSuccess}
+              error={!!errors.password}
               helperText={errors.password?.message}
               {...register("password", {
                 required: "La contraseña es obligatoria",
-                minLength: {
-                  value: 6,
-                  message: "Debe tener al menos 6 caracteres",
-                },
+                minLength: { value: 6, message: "Mínimo 6 caracteres" },
               })}
             />
 
@@ -159,7 +119,7 @@ export default function Login() {
               type="submit"
               variant="contained"
               fullWidth
-              disabled={loading || success}
+              disabled={isLoading || isSuccess}
               sx={{
                 mt: 3,
                 py: 1.4,
@@ -169,25 +129,14 @@ export default function Login() {
                 fontSize: "1rem",
               }}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : success ? (
-                "Redirigiendo..."
-              ) : (
-                "Iniciar sesión"
-              )}
+              {isLoading ? <CircularProgress size={24} color="inherit" /> : isSuccess ? "Redirigiendo..." : "Iniciar sesión"}
             </Button>
 
-            {!success && (
+            {!isSuccess && (
               <Box display="flex" justifyContent="center" mt={3}>
                 <Typography variant="body2" color="text.secondary">
                   ¿No tienes cuenta?{" "}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    underline="hover"
-                    fontWeight={600}
-                  >
+                  <Link component={RouterLink} to="/register" underline="hover" fontWeight={600}>
                     Regístrate
                   </Link>
                 </Typography>
@@ -197,19 +146,14 @@ export default function Login() {
         </CardContent>
       </Card>
 
-      {/* SNACKBAR */}
       <Snackbar
-        open={snackbar.open}
-        onClose={closeSnackbar}
+        open={feedback.open}
+        onClose={handleCloseFeedback}
         autoHideDuration={2000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert
-          onClose={closeSnackbar}
-          severity={snackbar.severity}
-          sx={{ fontWeight: "bold" }}
-        >
-          {snackbar.message}
+        <Alert onClose={handleCloseFeedback} severity={feedback.type} sx={{ fontWeight: "bold" }}>
+          {feedback.text}
         </Alert>
       </Snackbar>
     </Box>

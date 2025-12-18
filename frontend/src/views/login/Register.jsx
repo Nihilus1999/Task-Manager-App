@@ -82,9 +82,6 @@ export default function Register() {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{
-        background: "linear-gradient(135deg, #f5f7fa, #e4ebf5)",
-      }}
     >
       <Card
         elevation={6}
