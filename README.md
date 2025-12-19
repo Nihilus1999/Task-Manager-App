@@ -23,6 +23,8 @@ Dentro de la carpeta `backend/` encontrarás un archivo `README.md` con informac
 - Ejecución del servidor
 - Endpoints disponibles
 
+En el terminal puedes escribir **cd backend** para entrar directamente a esa ruta
+
 ---
 
 ### 🎨 Frontend
@@ -31,5 +33,7 @@ Dentro de la carpeta `frontend/` encontrarás un archivo `README.md` con informa
 - Configuración del entorno
 - Scripts disponibles
 - Forma de ejecutar la aplicación en desarrollo
+
+En el terminal puedes escribir **cd frontend** para entrar directamente a esa ruta
 
 ---
